@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootPart1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSequential"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootPart2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootPart3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeColect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootPart4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootSequential"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootPart1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootPart2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootPart3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootPart4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
