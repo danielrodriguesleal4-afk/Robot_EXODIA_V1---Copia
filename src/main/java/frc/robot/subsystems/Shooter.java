@@ -60,8 +60,8 @@ public class Shooter extends SubsystemBase {
 
     public void runShooter(double targetRPM) { //
 
-        pidControllerS1.setReference(-targetRPM, ControlType.kVelocity); // Motor 12
-        pidControllerS2.setReference(targetRPM, ControlType.kVelocity); // Motor 18
+        pidControllerS1.setReference(targetRPM, ControlType.kVelocity); // Motor 12
+        pidControllerS2.setReference(-targetRPM, ControlType.kVelocity); // Motor 18
        
     }
 

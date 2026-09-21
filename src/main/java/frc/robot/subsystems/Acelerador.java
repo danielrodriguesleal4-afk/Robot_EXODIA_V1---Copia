@@ -58,7 +58,7 @@ public class Acelerador extends SubsystemBase {
     public void runAcelerador(double targetRPM) {
 
         pidControllerA1.setReference(targetRPM, ControlType.kVelocity); // PCA1 (Motor )
-        pidControllerA2.setReference(targetRPM, ControlType.kVelocity); // PCA2 (Motor )
+        pidControllerA2.setReference(-targetRPM, ControlType.kVelocity); // PCA2 (Motor )
 
     }
 

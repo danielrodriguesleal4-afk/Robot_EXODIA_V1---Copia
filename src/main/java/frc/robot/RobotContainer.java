@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Acelerador;
 import frc.robot.subsystems.Index;
+import frc.robot.subsystems.IntekeAngle;
+import frc.robot.subsystems.IntekeRoller;
 
 // ---------------------------------------------------------------->
 
@@ -43,6 +45,12 @@ public class RobotContainer {
 
     // Subisistema do Index.
     private final Index index = new Index();
+
+    // Subisistema do Inteke Angulo.
+    private final IntekeAngle iAngle = new IntekeAngle();
+
+    // Subisistema do Inteke rolete.
+    private final IntekeRoller iRoller = new IntekeRoller();
 
     // ------------------------------------------------------------------------------------------------------------>
 
@@ -85,8 +93,18 @@ public class RobotContainer {
         Command lowModeCommand = swerve.driveFieldOriented(lowMode);
         swerve.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
+        // ================ Comandos do Mecanismos N 1 ================== //
+ 
+        // --------------------- Inteke Coletor. --------------------- //
+        xboxMovimentacao.a().whileTrue(
+            Commands.run(() -> iRoller.runIntekeRoller(3000), iRoller)
+            .finallyDo(() -> iRoller.stopIntakeRoller())
+        );
 
-        // ================ Comandos do Shooter ================== //
+        // --------------------- Inteke Angulação. ---------------------- //
+        // xboxMovimentacao.leftBumper()
+        
+        // ================ Comandos do Mecanismos N 2 ================== //
 
         // ---------------- Comando do lançador. ----------------- //
         xboxController.a().whileTrue(
@@ -95,7 +113,7 @@ public class RobotContainer {
         );
         // --------------- Comando do Acelerador. ---------------- //
         xboxController.rightBumper().whileTrue(
-            Commands.run(() -> acelerador.runAcelerador(-3000), acelerador)
+            Commands.run(() -> acelerador.runAcelerador(3000), acelerador)
                 .finallyDo(() -> acelerador.stopAcelerador())
         );
         // ------------------------------------------------------ // 
@@ -107,11 +125,6 @@ public class RobotContainer {
                  .finallyDo(() -> index.stopIndex())
         );
         // =========================================================== //
-
-
-
-
-
     
     }
 
