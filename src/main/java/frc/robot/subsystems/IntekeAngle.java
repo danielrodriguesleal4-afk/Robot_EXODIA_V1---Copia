@@ -18,7 +18,7 @@ public class IntekeAngle extends SubsystemBase {
 
     // ============================ Motores =========================== //
 
-        private final SparkMax Angle =
+        private final SparkMax angle =
             new SparkMax(16, MotorType.kBrushless); 
 
     // =============================================================== //

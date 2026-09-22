@@ -100,20 +100,22 @@ public class RobotContainer {
             Commands.run(() -> iRoller.runIntekeRoller(3000), iRoller)
             .finallyDo(() -> iRoller.stopIntakeRoller())
         );
-
         // --------------------- Inteke Angulação. ---------------------- //
         // xboxMovimentacao.leftBumper()
+
+
+
         
         // ================ Comandos do Mecanismos N 2 ================== //
 
         // ---------------- Comando do lançador. ----------------- //
         xboxController.a().whileTrue(
-           Commands.run(() -> shooter.runShooter(4000), shooter) // RPM fixo
+           Commands.run(() -> shooter.runShooter(5000), shooter) // RPM fixo
                .finallyDo(() -> shooter.stopShooter())
         );
         // --------------- Comando do Acelerador. ---------------- //
         xboxController.rightBumper().whileTrue(
-            Commands.run(() -> acelerador.runAcelerador(3000), acelerador)
+            Commands.run(() -> acelerador.runAcelerador(5000), acelerador)
                 .finallyDo(() -> acelerador.stopAcelerador())
         );
         // ------------------------------------------------------ // 
@@ -121,7 +123,7 @@ public class RobotContainer {
         // ================ Comados da esteira. ===================== // 
     
         xboxController.leftBumper().whileTrue(
-            Commands.run(() -> index.runIndex(0.8), index)
+            Commands.run(() -> index.runIndex(1), index)
                  .finallyDo(() -> index.stopIndex())
         );
         // =========================================================== //

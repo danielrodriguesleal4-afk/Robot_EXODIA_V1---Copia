@@ -21,10 +21,10 @@ public class Shooter extends SubsystemBase {
    // ======================== Motores ============================= // 
 
   private final SparkMax motor1 =
-      new SparkMax(12, MotorType.kBrushless); // Motor 12 (Lançador - Esquerdo)
+      new SparkMax(12, MotorType.kBrushless); // Motor 12 (Lançador - Direito)
 
   private final SparkMax motor2 = 
-      new SparkMax(18, MotorType.kBrushless); // Motor 18 (Lançador - Direito)
+      new SparkMax(18, MotorType.kBrushless); // Motor 18 (Lançador - Esquerda)
 
     // --------------------------------------------------------------------- //
 
