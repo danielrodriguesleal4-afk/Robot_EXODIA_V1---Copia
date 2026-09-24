@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -29,21 +28,20 @@ public class IntekeRoller extends SubsystemBase {
  
     public IntekeRoller() {
 
-        // ======================= Config RPM ======================= //
+        // ======================= Config Voltagem. ======================= //
 
         SparkMaxConfig configIR = new SparkMaxConfig();
-        configIR.closedLoop.pid(0.0004, 0.0, 0.0);
+        configIR.voltageCompensation(12);
         roller.configure(
             configIR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); // Aplicando a config
 
         // ========================================================== //
 
-
     }
 
-    public void runIntekeRoller(double targetRPM) {
+    public void runIntekeRoller(double speedPercent) {
 
-        pidControllerIR.setReference(targetRPM, ControlType.kVelocity); // 
+       roller.set(speedPercent);
     }
 
     public void stopIntakeRoller() {

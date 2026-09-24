@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Acelerador;
 import frc.robot.subsystems.Index;
-import frc.robot.subsystems.IntekeAngle;
+import frc.robot.subsystems.IntakeAngle;
 import frc.robot.subsystems.IntekeRoller;
 
 // ---------------------------------------------------------------->
@@ -47,7 +47,7 @@ public class RobotContainer {
     private final Index index = new Index();
 
     // Subisistema do Inteke Angulo.
-    private final IntekeAngle iAngle = new IntekeAngle();
+    private final IntakeAngle iAngle = new IntakeAngle();
 
     // Subisistema do Inteke rolete.
     private final IntekeRoller iRoller = new IntekeRoller();
@@ -93,40 +93,43 @@ public class RobotContainer {
         Command lowModeCommand = swerve.driveFieldOriented(lowMode);
         swerve.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
-        // ================ Comandos do Mecanismos N 1 ================== //
+        // ========================= Comandos do Mecanismos N 1 ========================= //
  
-        // --------------------- Inteke Coletor. --------------------- //
+        // ---------------------------- Inteke Coletor. ----------------------------- //
         xboxMovimentacao.a().whileTrue(
-            Commands.run(() -> iRoller.runIntekeRoller(3000), iRoller)
+            Commands.run(() -> iRoller.runIntekeRoller(1), iRoller)
             .finallyDo(() -> iRoller.stopIntakeRoller())
         );
-        // --------------------- Inteke Angulação. ---------------------- //
-        // xboxMovimentacao.leftBumper()
-
-
-
+        // -------------------------- Inteke Angulação (para cima) ------------------------- //
+        xboxMovimentacao.rightTrigger().whileTrue(
+            Commands.run(() -> iAngle.runIntakeAngle(0.9), iAngle)
+            .finallyDo(() -> iAngle.stopIntakeAngle())
+        );
+        // -------------------------- Inteke Angulação (para baixo) ------------------------- //
+        xboxMovimentacao.leftTrigger().whileTrue(
+            Commands.run(() -> iAngle.runIntakeAngle(-0.9), iAngle)
+            .finallyDo(() -> iAngle.stopIntakeAngle())
+        );
+        // =================================================================================== // 
         
-        // ================ Comandos do Mecanismos N 2 ================== //
+        // ======================= Comandos do Mecanismos N 2 ======================= //
 
-        // ---------------- Comando do lançador. ----------------- //
+        // ------------------------ Comando do lançador. ----------------------- //
         xboxController.a().whileTrue(
            Commands.run(() -> shooter.runShooter(5000), shooter) // RPM fixo
                .finallyDo(() -> shooter.stopShooter())
         );
-        // --------------- Comando do Acelerador. ---------------- //
+        // ------------------------ Comando do Acelerador. ------------------------ //
         xboxController.rightBumper().whileTrue(
-            Commands.run(() -> acelerador.runAcelerador(5000), acelerador)
+            Commands.run(() -> acelerador.runAcelerador(1), acelerador)
                 .finallyDo(() -> acelerador.stopAcelerador())
         );
-        // ------------------------------------------------------ // 
-
-        // ================ Comados da esteira. ===================== // 
-    
+        // -------------------------- Comados da esteira. ---------------------- // 
         xboxController.leftBumper().whileTrue(
             Commands.run(() -> index.runIndex(1), index)
                  .finallyDo(() -> index.stopIndex())
         );
-        // =========================================================== //
+        // ======================================================================== //
     
     }
 

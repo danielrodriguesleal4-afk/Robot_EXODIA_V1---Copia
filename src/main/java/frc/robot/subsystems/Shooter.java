@@ -11,7 +11,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import frc.robot.limeligtht.LimelightHelpers;
+// import frc.robot.limeligtht.LimelightHelpers;
 
 // ================================================ //
 
@@ -41,18 +41,31 @@ public class Shooter extends SubsystemBase {
         // ========= Configuração do Motor 12 ======== //
 
         SparkMaxConfig config1 = new SparkMaxConfig();
-        config1.closedLoop.pid(0.0004, 0.0, 0.0);
+        config1
+            .closedLoop
+            .pid(0.0004, 0.0, 0.0)
+            .feedForward
+            .kV(0.00012);
+
         motor1.configure(
-            config1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); // Aplicando a config
+            config1, ResetMode.kResetSafeParameters, 
+                     PersistMode.kPersistParameters); // Aplicando a config
 
         // ------------------------------------------- //
 
         // ======== Configuração do Motor 18 ========= //
 
         SparkMaxConfig config2 = new SparkMaxConfig();
-        config2.closedLoop.pid(0.0004, 0.0, 0.0);
+        config2
+            .inverted(true) // Inverte o Motor 18.
+            .closedLoop
+            .pid(0.0004, 0.0, 0.0)
+            .feedForward
+            .kV(0.00012);
+
         motor2.configure(
-            config2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); // Aplicando a config
+            config2, ResetMode.kResetSafeParameters,
+                     PersistMode.kPersistParameters); // Aplicando a config
 
         // -------------------------------------------- //
 
@@ -61,7 +74,7 @@ public class Shooter extends SubsystemBase {
     public void runShooter(double targetRPM) { //
 
         pidControllerS1.setReference(targetRPM, ControlType.kVelocity); // Motor 12
-        pidControllerS2.setReference(-targetRPM, ControlType.kVelocity); // Motor 18
+        pidControllerS2.setReference(targetRPM, ControlType.kVelocity); // Motor 18
        
     }
 
