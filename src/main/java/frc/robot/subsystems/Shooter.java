@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 // import frc.robot.limeligtht.LimelightHelpers;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 // ================================================ //
 
@@ -28,10 +29,10 @@ public class Shooter extends SubsystemBase {
 
     // --------------------------------------------------------------------- //
 
-  private final SparkClosedLoopController pidControllerS1 = // Ccontrolador motor 12
+  private final SparkClosedLoopController pidControllerS1 = // Controlador motor 12
        motor1.getClosedLoopController();
 
-  private final SparkClosedLoopController pidControllerS2 = // Ccontrolador motor 18
+  private final SparkClosedLoopController pidControllerS2 = // Controlador motor 18
        motor2.getClosedLoopController();
  
     // =============================================================== //
@@ -42,6 +43,7 @@ public class Shooter extends SubsystemBase {
 
         SparkMaxConfig config1 = new SparkMaxConfig();
         config1
+            .idleMode(IdleMode.kCoast) // Deixa ele sem freio
             .closedLoop
             .pid(0.0004, 0.0, 0.0)
             .feedForward
@@ -57,6 +59,7 @@ public class Shooter extends SubsystemBase {
 
         SparkMaxConfig config2 = new SparkMaxConfig();
         config2
+            .idleMode(IdleMode.kCoast) // Deixa ele sem freio.
             .inverted(true) // Inverte o Motor 18.
             .closedLoop
             .pid(0.0004, 0.0, 0.0)

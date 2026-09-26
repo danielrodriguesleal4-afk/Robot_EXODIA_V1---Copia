@@ -20,10 +20,6 @@ public class IntekeRoller extends SubsystemBase {
         private final SparkMax roller = 
             new SparkMax(17, MotorType.kBrushless);
 
-        private final SparkClosedLoopController pidControllerIR =
-            roller.getClosedLoopController();
-
-
     // ============================================================= //
  
     public IntekeRoller() {
@@ -31,7 +27,10 @@ public class IntekeRoller extends SubsystemBase {
         // ======================= Config Voltagem. ======================= //
 
         SparkMaxConfig configIR = new SparkMaxConfig();
-        configIR.voltageCompensation(12);
+        configIR
+        .inverted(true)
+        .voltageCompensation(12);
+
         roller.configure(
             configIR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); // Aplicando a config
 

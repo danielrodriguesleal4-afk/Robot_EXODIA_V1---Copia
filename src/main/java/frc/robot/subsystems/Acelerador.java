@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 // ========================================================== //
 
@@ -28,12 +29,19 @@ public class Acelerador extends SubsystemBase {
 
         // ---------------------------------- Config Acelerador 1 ------------------------------------- //
         SparkMaxConfig configA1 = new SparkMaxConfig();
-        configA1.voltageCompensation(12);
+        configA1
+            .idleMode(IdleMode.kCoast) // Deixa ele sem freio.
+            .voltageCompensation(12);
+
         acelerador1.configure(configA1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         // ---------------------------------- Config Acelerador 2 ------------------------------------ //
         SparkMaxConfig configA2 = new SparkMaxConfig();
-        configA2.voltageCompensation(12);
+        configA2
+            .idleMode(IdleMode.kCoast) // Deixa ele sem freio.
+            .inverted(true)
+            .voltageCompensation(12);
+
         acelerador2.configure(configA2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         // ------------------------------------------------------------------------------------------- //

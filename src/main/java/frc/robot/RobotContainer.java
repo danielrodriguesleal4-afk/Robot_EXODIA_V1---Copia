@@ -97,19 +97,20 @@ public class RobotContainer {
  
         // ---------------------------- Inteke Coletor. ----------------------------- //
         xboxMovimentacao.a().whileTrue(
-            Commands.run(() -> iRoller.runIntekeRoller(1), iRoller)
+            Commands.run(() -> iRoller.runIntekeRoller(0.8), iRoller)
             .finallyDo(() -> iRoller.stopIntakeRoller())
         );
         // -------------------------- Inteke Angulação (para cima) ------------------------- //
         xboxMovimentacao.rightTrigger().whileTrue(
-            Commands.run(() -> iAngle.runIntakeAngle(0.9), iAngle)
+            Commands.run(() -> iAngle.runIntakeAngle(0.15), iAngle)
             .finallyDo(() -> iAngle.stopIntakeAngle())
-        );
+            );
+
         // -------------------------- Inteke Angulação (para baixo) ------------------------- //
         xboxMovimentacao.leftTrigger().whileTrue(
-            Commands.run(() -> iAngle.runIntakeAngle(-0.9), iAngle)
+            Commands.run(() -> iAngle.runIntakeAngle(-0.15), iAngle)
             .finallyDo(() -> iAngle.stopIntakeAngle())
-        );
+            );
         // =================================================================================== // 
         
         // ======================= Comandos do Mecanismos N 2 ======================= //
@@ -121,12 +122,12 @@ public class RobotContainer {
         );
         // ------------------------ Comando do Acelerador. ------------------------ //
         xboxController.rightBumper().whileTrue(
-            Commands.run(() -> acelerador.runAcelerador(1), acelerador)
+            Commands.run(() -> acelerador.runAcelerador(0.7), acelerador)
                 .finallyDo(() -> acelerador.stopAcelerador())
         );
         // -------------------------- Comados da esteira. ---------------------- // 
         xboxController.leftBumper().whileTrue(
-            Commands.run(() -> index.runIndex(1), index)
+            Commands.run(() -> index.runIndex(0.7), index)
                  .finallyDo(() -> index.stopIndex())
         );
         // ======================================================================== //
