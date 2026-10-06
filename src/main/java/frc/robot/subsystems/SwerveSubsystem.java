@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConfigs;
+import frc.robot.limeligtht.LimelightHelpers;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
@@ -289,6 +290,15 @@ public class SwerveSubsystem extends SubsystemBase {
 CommandXboxController controlAim = new CommandXboxController(0);
   public PIDController PDAim = new PIDController(0.1, 0., 0);
 
+  /**
+   * Comando para mover o robô enquanto alinha com a Limelight.
+   * O robô se move com os sticks E gira automaticamente para mirar no alvo.
+   *
+   * @param translationX Supplier do input X do joystick (movimento lateral)
+   * @param translationY Supplier do input Y do joystick (movimento frente/trás)
+   * @param txSupplier Supplier do valor TX da Limelight (offset horizontal)
+   * @return Comando que combina movimento + alinhamento
+   */
   public Command driveAndAimAtTargetE(
       DoubleSupplier translationX,
       DoubleSupplier translationY,
@@ -296,32 +306,103 @@ CommandXboxController controlAim = new CommandXboxController(0);
   ) {
     return run(() -> {
 
-      // Cubic scaling (igual você já faz)
+      // ========== VERIFICAÇÃO DE ALVO PRIMEIRO ========== //
+      // Se não tem alvo visível, para o robô e sai
+      if (!LimelightHelpers.getTV("limelight")) {
+        swerveStop();
+        SmartDashboard.putBoolean("Limelight/HasTarget", false);
+        SmartDashboard.putString("Limelight/Status", "Sem alvo!");
+        return;
+      }
+
+      SmartDashboard.putBoolean("Limelight/HasTarget", true);
+
+      // ========== MOVIMENTO DO JOYSTICK ========== //
+      // Cubic scaling para movimento suave
       double xInput = Math.pow(translationX.getAsDouble(), 3);
       double yInput = Math.pow(translationY.getAsDouble(), 3);
 
-      // Velocidade linear
+      // Velocidade linear (30% durante alinhamento - ajuste se quiser mais rápido)
       Translation2d translation = new Translation2d(
-          xInput * swerveDrive.getMaximumChassisVelocity()*0.3,
-          yInput * swerveDrive.getMaximumChassisVelocity()*0.3);
+          xInput * swerveDrive.getMaximumChassisVelocity() * 0.5,
+          yInput * swerveDrive.getMaximumChassisVelocity() * 0.5);
 
-      // PID de alinhamento
-      double tx = txSupplier.getAsDouble(); // erro em graus
+      // ========== PID DE ALINHAMENTO ========== //
+      double tx = txSupplier.getAsDouble(); // erro em graus (-27 a +27)
 
-      PDAim.setSetpoint(-3);
-      PDAim.setTolerance(1.0);
+      // Configura o PID para alinhar em 0 graus (centro do alvo)
+      PDAim.setSetpoint(0);  // 0 =对准中心
+      PDAim.setTolerance(1.0);  // 1 grau de tolerância
 
+      // Calcula a velocidade angular necessária
       double omega = PDAim.calculate(tx);
 
-      // Limita a rotação
+      // Limita a rotação para não girar muito rápido
       omega = MathUtil.clamp(
           omega,
           -swerveDrive.getMaximumChassisAngularVelocity(),
           swerveDrive.getMaximumChassisAngularVelocity());
 
-      // Aplica no swerve (FIELD RELATIVE)
-      drive(translation, -omega, false);
-    });
+      // ========== DEBUG NO SMARTDASHBOARD ========== //
+      SmartDashboard.putNumber("Limelight/TX", tx);
+      SmartDashboard.putNumber("Limelight/PID_Output", omega);
+      SmartDashboard.putString("Limelight/Status", "Alinhando...");
 
-}
+      // ========== APLICA NO SWERVE ========== //
+      // fieldRelative = true para manter controle normal do campo
+      drive(translation, -omega, true);
+    });
+  }
+
+  /**
+   * Para o robô (usado quando perde o alvo ou termina alinhamento)
+   */
+
+  /**
+   * Método simples para verificar se a Limelight está vendo um alvo.
+   * Útil para usar em outros comandos.
+   *
+   * @return true se tem alvo visível, false se não
+   */
+  public boolean isLimelightHasTarget() {
+    return LimelightHelpers.getTV("limelight");
+  }
+
+  /**
+   * Obtém o ângulo horizontal do alvo em graus.
+   *
+   * @return TX em graus (-27 a +27)
+   */
+  public double getLimelightTX() {
+    return LimelightHelpers.getTX("limelight");
+  }
+
+  /**
+   * Obtém o ângulo vertical do alvo em graus.
+   * Útil para calcular distância.
+   *
+   * @return TY em graus (-20.5 a +20.5)
+   */
+  public double getLimelightTY() {
+    return LimelightHelpers.getTY("limelight");
+  }
+
+  /**
+   * Calcula a distância até o alvo usando trigonometria.
+   *
+   * @param limelightMountAngleDegrees Ângulo de montagem da câmera (graus)
+   * @param limelightLensHeightInches Altura da câmera (polegadas)
+   * @param goalHeightInches Altura do alvo (polegadas)
+   * @return Distância em polegadas
+   */
+  public double getDistanceToTarget(double limelightMountAngleDegrees,
+                                    double limelightLensHeightInches,
+                                    double goalHeightInches) {
+    double ty = getLimelightTY();
+    double angleToGoalDegrees = limelightMountAngleDegrees + ty;
+    double angleToGoalRadians = angleToGoalDegrees * (Math.PI / 180.0);
+
+    return (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+  }
+
 }

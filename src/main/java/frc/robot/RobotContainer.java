@@ -25,6 +25,7 @@ import frc.robot.subsystems.Acelerador;
 import frc.robot.subsystems.Index;
 import frc.robot.subsystems.IntakeAngle;
 import frc.robot.subsystems.IntekeRoller;
+import frc.robot.limeligtht.LimelightHelpers;
 
 // ---------------------------------------------------------------->
 
@@ -61,10 +62,10 @@ public class RobotContainer {
     // ============================================ CONTROLES ===================================================== //
 
     // Controle de Xbox (Piloto)
-    private CommandXboxController xboxMovimentacao = new CommandXboxController(Controle.xboxControle);
+    private CommandXboxController xboxMovimentacao = new CommandXboxController(Controle.xboxControle0);
 
     // Controle de Xbox N 2 (MECANISMOS)
-    private CommandXboxController xboxController = new CommandXboxController(1);
+    private CommandXboxController xboxController = new CommandXboxController(Controle.xboxControle1);
 
     // ----------------------------------------------------------------------------------------------------------->
 
@@ -121,17 +122,32 @@ public class RobotContainer {
                .finallyDo(() -> shooter.stopShooter())
         );
         // ------------------------ Comando do Acelerador. ------------------------ //
-        xboxController.rightBumper().whileTrue(
+        xboxController.rightTrigger().whileTrue(
             Commands.run(() -> acelerador.runAcelerador(0.7), acelerador)
                 .finallyDo(() -> acelerador.stopAcelerador())
         );
-        // -------------------------- Comados da esteira. ---------------------- // 
-        xboxController.leftBumper().whileTrue(
+        // -------------------------- Comados da esteira. ---------------------- //
+        xboxController.leftTrigger().whileTrue(
             Commands.run(() -> index.runIndex(0.7), index)
                  .finallyDo(() -> index.stopIndex())
         );
         // ======================================================================== //
-    
+
+        // ======================= ALINHAMENTO COM LIMELIGHT ======================= //
+
+        // Botão X: Alinha o robô com o alvo da Limelight enquanto move
+        // Mantenha pressionado para ativar o alinhamento automático
+        xboxMovimentacao.x().whileTrue(swerve.driveAndAimAtTargetE(
+            () -> -xboxMovimentacao.getLeftY() * 1,  // Joystick Y
+            () -> -xboxMovimentacao.getLeftX() * 1,  // Joystick X
+            () -> LimelightHelpers.getTX("limelight")  // TX da Limelight
+        ));
+
+        // Botão Y: Zera o giroscópio
+        xboxMovimentacao.y().onTrue(Commands.runOnce(swerve::zeroGyro, swerve));
+
+        // ======================================================================== //
+
     }
 
     // Função que retorna o autônomo

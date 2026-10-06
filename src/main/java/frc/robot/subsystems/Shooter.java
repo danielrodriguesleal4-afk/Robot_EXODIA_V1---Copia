@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
       new SparkMax(12, MotorType.kBrushless); // Motor 12 (Lançador - Direito)
 
   private final SparkMax motor2 = 
-      new SparkMax(18, MotorType.kBrushless); // Motor 18 (Lançador - Esquerda)
+      new SparkMax(14, MotorType.kBrushless); // Motor 14 (Lançador - Esquerda)
 
     // --------------------------------------------------------------------- //
 
@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase {
 
     public Shooter() {
 
-        // ========= Configuração do Motor 12 ======== //
+        // ====================== Configuração do Motor 12 ================== //
 
         SparkMaxConfig config1 = new SparkMaxConfig();
         config1
@@ -53,9 +53,9 @@ public class Shooter extends SubsystemBase {
             config1, ResetMode.kResetSafeParameters, 
                      PersistMode.kPersistParameters); // Aplicando a config
 
-        // ------------------------------------------- //
+        // ------------------------------------------------------------------ //
 
-        // ======== Configuração do Motor 18 ========= //
+        // ===================== Configuração do Motor 18 =================== //
 
         SparkMaxConfig config2 = new SparkMaxConfig();
         config2
@@ -70,7 +70,7 @@ public class Shooter extends SubsystemBase {
             config2, ResetMode.kResetSafeParameters,
                      PersistMode.kPersistParameters); // Aplicando a config
 
-        // -------------------------------------------- //
+        // ----------------------------------------------------------------- //
 
     }
 

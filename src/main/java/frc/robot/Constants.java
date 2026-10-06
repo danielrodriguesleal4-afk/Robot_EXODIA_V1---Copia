@@ -38,8 +38,10 @@ public final class Constants {
 
   // Contem a porta em que o controle está
   public static final class Controle {
+
     // Porta do controle
-    public static final int xboxControle = 0;
+    public static final int xboxControle0 = 0;
+    public static final int xboxControle1 = 1;
     
     // Deadband do controle
     public static final double DEADBAND = 0.2; // 0.2

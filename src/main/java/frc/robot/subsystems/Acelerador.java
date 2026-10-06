@@ -18,10 +18,10 @@ public class Acelerador extends SubsystemBase {
 // ================================ Criação do Motores ============================ //
 
     private final SparkMax acelerador1 =
-       new SparkMax(13, MotorType.kBrushless); // Motor 13 (Acelerador - direito)
+       new SparkMax(31, MotorType.kBrushless); // Motor 31 (Acelerador - direito)
 
     private final SparkMax acelerador2 =
-       new SparkMax(14, MotorType.kBrushless); // Motor 14 (Acelerador - Esquerdo)
+       new SparkMax(30, MotorType.kBrushless); // Motor 30 (Acelerador - Esquerdo)
 
     // -------------------------------------------------------------------------- //
 
@@ -31,6 +31,7 @@ public class Acelerador extends SubsystemBase {
         SparkMaxConfig configA1 = new SparkMaxConfig();
         configA1
             .idleMode(IdleMode.kCoast) // Deixa ele sem freio.
+            .inverted(true)
             .voltageCompensation(12);
 
         acelerador1.configure(configA1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -39,7 +40,7 @@ public class Acelerador extends SubsystemBase {
         SparkMaxConfig configA2 = new SparkMaxConfig();
         configA2
             .idleMode(IdleMode.kCoast) // Deixa ele sem freio.
-            .inverted(true)
+            .inverted(false)
             .voltageCompensation(12);
 
         acelerador2.configure(configA2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
